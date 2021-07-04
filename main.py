@@ -21,7 +21,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 PREFIX = configs.PREFIX
-TOKEN = 'ODUxOTEyNjI5ODk4MzEzNzM1.YL_Ldg.6tvIBgHtflibESYOrunVPxsjBW4'
+TOKEN = 'tokenHere'
 client = commands.Bot(command_prefix=PREFIX, intents = intents)
 allintents = intents = discord.Intents.all()
 SHUURL = 'https://asenshu.com'
