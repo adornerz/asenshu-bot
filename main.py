@@ -5,16 +5,10 @@ import yaml
 import random
 import configs
 import asyncio
-import os
-import html5lib
 import json
-import shutil
-import urllib.request
-import requests
+import string
 from bs4 import BeautifulSoup
 from discord.ext import commands
-import string
-import challonge
 from discord.utils import get
 
 intents = discord.Intents.default()
@@ -418,9 +412,9 @@ async def musicquizz(ctx,nrofsongs, genre, role : discord.Role, delay):
         if ((isinstance(L[0], Error)) == True) and ((isinstance(L[1], Error)) == False):
             print("Author wasn't found, only title.")
             print(f"Author was found by: {L[1].author.mention}")
-            quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nVetem kengetari u gjet nga {L[1].author.mention}")
+            quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nVetem titulli u gjet nga {L[1].author.mention} [ketu]({L[1].jump_url})")
             await ctx.send(embed = quizz)
-            username = L[1].author.name
+            username = L[1].author
             points = 1
             variable = d.get(username)
             if isinstance(variable, int) == False:
@@ -428,14 +422,15 @@ async def musicquizz(ctx,nrofsongs, genre, role : discord.Role, delay):
             d1 = {username : points + variable}
             d.update(d1)
             print(d)
+            voiceChannel.stop()
 
         elif ((isinstance(L[1], Error)) == True) and ((isinstance(L[0], Error)) == False):
             print("Title wasn't found, only author.")
             print(f"Title was found by: {L[0].author.mention}")
-            quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nVetem titulli u gjet nga {L[0].author.mention}")
+            quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nVetem kengetari u gjet nga {L[0].author.mention} [ketu]({L[0].jump_url})]")
             await ctx.send(embed = quizz)
 
-            username = L[0].author.name
+            username = L[0].author
             points = 1
             variable = d.get(username)
             if isinstance(variable, int) == False:
@@ -443,6 +438,7 @@ async def musicquizz(ctx,nrofsongs, genre, role : discord.Role, delay):
             d1 = {username : points + variable}
             d.update(d1)
             print(d)
+            voiceChannel.stop()
 
         elif ((isinstance(L[1], Error)) == True) and ((isinstance(L[1], Error)) == True):
             quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nAskush s'gjeti asgje.")
@@ -450,9 +446,12 @@ async def musicquizz(ctx,nrofsongs, genre, role : discord.Role, delay):
         elif ((isinstance(L[1], Error)) == False) and ((isinstance(L[1], Error)) == False):
             print(f"Title was found by: {L[0].author.mention}")
             print(f"Author was found by: {L[1].author.mention}")
-            quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nKengetari u gjet nga {L[1].author.mention}\nTitulli u gjet nga {L[0].author.mention}")
+            quizz = discord.Embed(title = '', description = f"Titulli:{title}\nKengetari:{author}\nKengetari u gjet nga {L[1].author.mention} [ketu]({L[1].jump_url})\nTitulli u gjet nga {L[0].author.mention} [ketu]({L[0].jump_url})")
             await ctx.send(embed = quizz)
-            username = L[1].author.name
+
+            author = L[1].author
+            points = 1
+            username = L[1].author
             points = 1
             variable = d.get(username)
             if isinstance(variable, int) == False:
@@ -460,22 +459,35 @@ async def musicquizz(ctx,nrofsongs, genre, role : discord.Role, delay):
             d1 = {username : points + variable}
             d.update(d1)
             print(d)
-
-            username = L[0].author.name
+            username = L[0].author
             points = 1
             variable = d.get(username)
             if isinstance(variable, int) == False:
                 variable = 0
+
             d1 = {username : points + variable}
             d.update(d1)
-            print(d)
-        else:
-            print("\n\n\nLoop didn't work\n\n\n")
+            songNum += 1
+            voiceChannel.stop()
 
-        songNum += 1
-        voiceChannel.stop()
+    songNum += 1
+    sortedPoints = sorted(d.items(), key=lambda x: x[1], reverse=True)
+    winnerIndex = sortedPoints[0]
+    winnerAuthor = winnerIndex[0]
+    winnerPoints = winnerIndex[1]
 
-    await ctx.send(d)
+    leaderboard = """
+    """
+    for item in sortedPoints:
+        value = item
+        author = value[0]
+        points = value[1]
+        leaderboard += f"{author.mention} me {points} pike!\n"
+
+    await ctx.send(embed = embeds.winnerEmbed(leaderboard, winnerAuthor, winnerPoints))
+
+    print(sortedPoints)
+    await voiceChannel.disconnect()
     d = {}
 
 client.run(TOKEN)
