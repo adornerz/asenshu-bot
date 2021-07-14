@@ -1,13 +1,11 @@
 import os
 import discord
 import embeds
-import yaml
 import random
 import configs
 import asyncio
 import json
 import string
-from bs4 import BeautifulSoup
 from discord.ext import commands
 from discord.utils import get
 
@@ -15,22 +13,13 @@ intents = discord.Intents.default()
 intents.members = True
 
 PREFIX = configs.PREFIX
-TOKEN = 'tokenHere'
+TOKEN = 'ODUxOTEyNjI5ODk4MzEzNzM1.YL_Ldg.TAY4yCAjufX2vOSo7TeUEdbsRnY'
 client = commands.Bot(command_prefix=PREFIX, intents = intents)
 allintents = intents = discord.Intents.all()
 SHUURL = 'https://asenshu.com'
 taVeEnabled = False
 activeDebate = False
 chars = string.ascii_letters
-
-with open(r'data.yaml') as file:
-    data = yaml.load(file, Loader=yaml.FullLoader)
-    if data['taVeEnabled'] == True:
-        taVeEnabled = True
-        print("TaVe was enabled, keeping it that way.")
-    else:
-        taVeEnabled = False
-        print("TaVe was disabled, keeping it that way.")
 
 @client.event
 async def on_ready():
@@ -87,14 +76,13 @@ async def on_message(message):
 #    elif (message.author.name) == "sindi" and message.content.lower() == "yems":
 #        await message.reply("Kopjuse")
 
-    if (message.content).lower() == "bilbilush":
-        image = discord.File('./assets/bilbilushi.jpg')
-        await message.reply("look at this ||ugly|| cutie", file = image)
+    if (message.content).lower() == "mami jot":
+        await message.reply("https://media.discordapp.net/attachments/864088959894552596/864892845193035836/robux.gif")
 
-    if (message.channel.id == configs.debatChannel) and (message.author.name != "Asenshu Bot") and (message.content.startswith("Opinion: ")):
-        await message.add_reaction(emoji = '⬆️')
-        await message.pin
+    if (message.content).lower() == "i ndertuar ndryshe":
+        await message.reply("https://cdn.discordapp.com/attachments/864088959894552596/864892845604995092/sex_offender.gif")
 
+    
 
 @client.command('pussy')
 async def pussy(ctx):
@@ -489,5 +477,24 @@ async def musicquizz(ctx,nrofsongs, genre, role : discord.Role, delay):
     print(sortedPoints)
     await voiceChannel.disconnect()
     d = {}
+
+staffRoleID = 864088814032650241
+@client.command(name = 'createanime')
+@commands.has_role(staffRoleID)
+async def embedtest(ctx, *, args):
+    GUILD = client.get_guild(configs.guildID)
+    animeListChannel = client.get_channel(864088926611701760)
+    argList = args.split(" | ")
+    title = argList[0]
+    image = argList[1]
+    pershkrimi = argList[2]
+    titleNoSpaces = title.lower().replace(' ', '-')
+    url = f"https://asenshu.com/seriale/{titleNoSpaces}"
+
+    embed = discord.Embed(title = title, url = url, description = pershkrimi, color = 0xc51d1d)
+    embed.set_thumbnail(url = image)
+    await animeListChannel.send(embed = embed)
+    await ctx.reply(f"Embed u krijua dhe dergua me sukses.\n URL e gjeneruar: {url}")
+
 
 client.run(TOKEN)
