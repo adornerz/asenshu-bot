@@ -13,7 +13,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 PREFIX = configs.PREFIX
-TOKEN = 'ODUxOTEyNjI5ODk4MzEzNzM1.YL_Ldg.TAY4yCAjufX2vOSo7TeUEdbsRnY'
+TOKEN = 'TOKEN'
 client = commands.Bot(command_prefix=PREFIX, intents = intents)
 allintents = intents = discord.Intents.all()
 SHUURL = 'https://asenshu.com'
